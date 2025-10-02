@@ -1,0 +1,129 @@
+:root {
+  --background:  #1E1E1E;
+  --details-dark: #2D2D2D;
+  --light-dark: #3C3C3C;
+  --green1: #16A34A;
+  --green2:   #22C55E;
+  --green3:  #34D399;
+  --text1:   #F3F4F6;
+  --text2: #D1D5DB;
+  --text3: #9CA3AF;
+  /* Or / Premium */
+  --premium-light: #ffd966;
+  --premium: #dfa81c;
+  --premium-dark: #b87700;
+
+  --premium-gradient: linear-gradient(
+    90deg,
+    var(--premium-light) 0%,
+    var(--premium) 35%,
+    var(--premium-dark) 70%,
+    var(--premium-light) 100%
+  );
+
+  --neutral-light: #f3f4f6;
+  --neutral:       #34D399; /* ≈ text1 */
+  --neutral-dark:  #e5e7eb; /* gris clair */
+  --neutral-gradient: linear-gradient(
+    90deg,
+    var(--neutral-light) 0%,
+    var(--neutral) 50%,
+    var(--neutral-dark) 100%
+  );
+}
+
+/* Import Tailwind (génère bg-[var(--…)] au build !) */
+@import "tailwindcss";
+
+html {
+  background: var(--background);
+  color: #F3F4F6;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+ .no-spinner::-webkit-outer-spin-button,
+ .no-spinner::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+ .no-spinner { -moz-appearance: textfield; }
+
+ .bubbles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 1;
+}
+
+@keyframes gold-shine {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.premium-text-animated {
+  background: linear-gradient(
+    90deg,
+    var(--premium-light),
+    var(--premium),
+    var(--premium-dark),
+    var(--premium-light)
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 3s linear infinite;
+}
+
+
+
+.scrollbox { scrollbar-width: thin; scrollbar-color: var(--light-dark) transparent; }
+.scrollbox::-webkit-scrollbar { width: 10px; height: 8px;}
+.scrollbox::-webkit-scrollbar-track { background: var(--details-dark); border-radius: 9999px; }
+.scrollbox::-webkit-scrollbar-thumb { background: var(--light-dark); border-radius: 9999px; }
+.scrollbox:hover::-webkit-scrollbar-thumb { background: var(--text3); }
+
+
+.bubbles span {
+  position: absolute;
+  bottom: -150px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+
+  animation-name: rise;
+  /* si --anim-duration n’existe pas, on prend 60s */
+  animation-duration: var(--anim-duration, 60s);
+  animation-delay:    var(--anim-delay, 0s);
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+}
+
+@keyframes rise {
+  0% {
+    transform: translateY(0) scale(0.5);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-200vh) scale(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes scroll {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.animate-scroll {
+  animation: scroll 3s linear infinite;
+}
