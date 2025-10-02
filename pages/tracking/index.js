@@ -187,7 +187,7 @@ export default function TrackingPage() {
                    active:scale-90 transition"
         title="Verrouiller la journée"
       >
-        <Lock size={18} />
+        <Unlock size={18} />
       </button>
     ) : (
       <button
@@ -198,7 +198,7 @@ export default function TrackingPage() {
                    active:scale-90 transition"
         title="Déverrouiller la journée"
       >
-        <Unlock size={18} />
+        <Lock size={18} />
       </button>
     )}
     <button

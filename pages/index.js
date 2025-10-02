@@ -16,7 +16,11 @@ export default function HomePage() {
     };
 
     checkSession();
-  }, []);
+  }, [router]);
 
-  return null; // Pas besoin d'afficher quoi que ce soit ici
+  return (
+    <div className="h-screen flex items-center justify-center text-lg">
+      Chargement...
+    </div>
+  );
 }

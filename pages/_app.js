@@ -1,63 +1,38 @@
-// pages/_app.js
-import "@/styles/globals.css";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import NavBar from "@/components/navbar";
 
 export default function MyApp({ Component, pageProps }) {
+  const [logs, setLogs] = useState([]);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showInstall, setShowInstall] = useState(false);
 
+  const addLog = (msg) => {
+    setLogs((prev) => [...prev, msg]);
+  };
+
   useEffect(() => {
-    async function ensureUserSettings() {
-      try {
-        const { data: userData, error: authErr } = await supabase.auth.getUser();
-        if (authErr) {
-          console.warn("⚠️ Auth error:", authErr.message);
-          return;
-        }
+    addLog("🟢 PWA debug actif");
 
-        const user = userData?.user;
-        if (!user) return;
+    // Vérifier manifest
+    fetch("/manifest.json")
+      .then((res) => res.json())
+      .then((data) => addLog("📄 Manifest OK: " + data.start_url))
+      .catch((err) => addLog("❌ Manifest error"));
 
-        const { data, error } = await supabase
-          .from("user_settings")
-          .select("*")
-          .eq("user_id", user.id)
-          .maybeSingle();
-
-        if (error) {
-          console.error("⚠️ Error fetching settings:", error.message);
-          return;
-        }
-
-        if (!data) {
-          await supabase.from("user_settings").insert({
-            user_id: user.id,
-            end_hour: 4, // 4h par défaut
-          });
-          console.log("✨ Paramètres utilisateur créés pour", user.email);
-        }
-      } catch (err) {
-        console.error("Unexpected error:", err);
-      }
-    }
-
-    ensureUserSettings();
-
-    // 👉 Enregistrement du Service Worker
+    // Vérifier SW
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/service-worker.js")
-        .then(() => console.log("✅ Service Worker enregistré"))
-        .catch((err) => console.error("❌ SW registration failed", err));
+      navigator.serviceWorker.getRegistrations().then((regs) => {
+        addLog("⚙️ Service Workers actifs: " + regs.length);
+      });
     }
 
-    // 👉 Gestion du prompt d'installation
+    // Écouter beforeinstallprompt
     const handler = (e) => {
-      e.preventDefault(); // empêche Chrome d’ouvrir le prompt automatiquement
-      setDeferredPrompt(e); // on garde l’événement
-      setShowInstall(true); // on affiche notre bouton custom
+      addLog("📲 beforeinstallprompt déclenché !");
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowInstall(true);
     };
     window.addEventListener("beforeinstallprompt", handler);
 
@@ -66,29 +41,23 @@ export default function MyApp({ Component, pageProps }) {
     };
   }, []);
 
-  // Quand l’utilisateur clique sur le bouton Installer
   const handleInstall = async () => {
     if (!deferredPrompt) return;
-
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    console.log("Résultat de l’installation :", outcome);
-
+    addLog("Résultat installation: " + outcome);
     setDeferredPrompt(null);
     setShowInstall(false);
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--background)] text-[var(--text1)]">
-      {/* Navigation globale */}
       <NavBar />
-
-      {/* Contenu principal */}
       <main className="flex-1">
         <Component {...pageProps} />
       </main>
 
-      {/* Bouton Installer l'app */}
+      {/* Bouton Installer */}
       {showInstall && (
         <button
           onClick={handleInstall}
@@ -97,6 +66,13 @@ export default function MyApp({ Component, pageProps }) {
           📲 Installer l’app
         </button>
       )}
+
+      {/* Debug visible */}
+      <div className="fixed bottom-0 left-0 right-0 bg-black text-green-400 text-xs p-2 max-h-40 overflow-y-auto">
+        {logs.map((l, i) => (
+          <div key={i}>{l}</div>
+        ))}
+      </div>
     </div>
   );
 }
