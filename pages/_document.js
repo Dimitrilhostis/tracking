@@ -9,8 +9,8 @@ export default function Document() {
         <meta name="theme-color" content="#16a34a" />
 
         {/* Apple iOS */}
-        <link rel="apple-touch-icon" href="/images/icon.svg" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+        <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </Head>
       <body>

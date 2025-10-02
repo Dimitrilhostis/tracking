@@ -56,7 +56,7 @@ export default function LoginPage() {
         
         {/* --- Header --- */}
         <h1 className="mb-2 text-center text-2xl font-semibold tracking-tight text-[var(--text1)]">
-          Bienvenue sur <span className="text-[var(--green2)]">The Smart Way</span>
+          Bienvenue sur <span className="text-[var(--green2)]">The Smart Tracking</span>
         </h1>
         <p className="mb-6 text-center text-sm text-[var(--text2)]">
           Connecte-toi pour suivre ta journée

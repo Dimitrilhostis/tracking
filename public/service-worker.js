@@ -3,12 +3,13 @@ const OFFLINE_URL = "/offline.html";
 
 // Fichiers à mettre en cache dès l'installation
 const PRECACHE_ASSETS = [
-  "/",
-  "/manifest.json",
-  OFFLINE_URL,
-  "/icons/icon-192.png",
-  "/icons/icon-512.png"
-];
+    "/",
+    "/manifest.json",
+    "/offline.html",
+    "/icons/icon-192.png",
+    "/icons/icon-512.png"
+  ];
+  
 
 // Installation → met les assets en cache
 self.addEventListener("install", (event) => {
