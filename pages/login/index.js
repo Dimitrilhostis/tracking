@@ -34,7 +34,12 @@ export default function LoginPage() {
   const handleLogin = async () => {
     try {
       setError("");
-      const { error } = await supabase.auth.signInWithOAuth({ provider: "google" });
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });      
       if (error) throw error;
     } catch (e) {
       console.error(e);
@@ -44,7 +49,13 @@ export default function LoginPage() {
 
   return (
     <main className="flex min-h-screen items-center justify-center 
-                     bg-[var(--details-dark)]/90 backdrop-blur">
+                     bg-[var(--details-dark)]/90 backdrop-blur"
+      style={{
+        background: `
+          linear-gradient(to bottom, rgba(30,30,30,0.9), rgba(30,30,30,0.6) 30%, rgba(30,30,30,0.9)),
+          url('/images/hero-bg.jpg') center/cover no-repeat
+        `,
+      }}>
       <div className="w-full max-w-sm rounded-3xl border border-[var(--text3)]/20 
                       bg-[var(--details-dark)] p-8 shadow-2xl">
         
@@ -89,3 +100,4 @@ export default function LoginPage() {
     </main>
   );
 }
+  
