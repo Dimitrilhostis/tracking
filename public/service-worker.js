@@ -1,21 +1,31 @@
 const CACHE_NAME = "tsmart-cache-v1";
 const OFFLINE_URL = "/offline.html";
 
-// Fichiers à mettre en cache dès l'installation
 const PRECACHE_ASSETS = [
-    "/",
-    "/manifest.json",
-    "/offline.html",
-    "/icons/icon-192.png",
-    "/icons/icon-512.png"
-  ];
-  
+  "/",
+  "/manifest.json",
+  OFFLINE_URL,
+  "/icons/icon-192.png",
+  "/icons/icon-512.png"
+];
 
 // Installation → met les assets en cache
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(PRECACHE_ASSETS);
+      return Promise.all(
+        PRECACHE_ASSETS.map((url) =>
+          fetch(url)
+            .then((response) => {
+              if (response.ok) {
+                return cache.put(url, response);
+              }
+            })
+            .catch(() => {
+              console.warn("⚠️ Impossible de précharger :", url);
+            })
+        )
+      );
     })
   );
   self.skipWaiting();
@@ -53,7 +63,6 @@ self.addEventListener("fetch", (event) => {
           return networkResponse;
         })
         .catch(() => {
-          // Si offline et pas de cache, montrer offline.html
           if (cachedResponse) return cachedResponse;
           if (event.request.mode === "navigate") {
             return caches.match(OFFLINE_URL);
