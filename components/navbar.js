@@ -55,7 +55,7 @@ export default function NavBar() {
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
           {/* Brand */}
           <Link href="/tracking" className="font-semibold text-[var(--premium)]">
-            The Smart Way
+            The Smart Tracking
           </Link>
 
           {/* Nav links */}
