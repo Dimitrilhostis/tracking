@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import NavBar from "@/components/navbar";
 import InstallButton from "@/components/install_button";
+import InstallPromptProvider from "@/components/install_button";
 
 export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
@@ -60,7 +61,7 @@ export default function MyApp({ Component, pageProps }) {
       {/* Contenu principal */}
       <main className="flex-1">
         <Component {...pageProps} />
-        <InstallButton />
+        <InstallPromptProvider />
       </main>
     </div>
   );
