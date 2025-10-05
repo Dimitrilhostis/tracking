@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/router";
 import { ChevronLeft, ChevronRight, LogOut, Bell, CheckCircle2, Circle } from "lucide-react";
+import InstallButton from "@/components/install_button";
 
 export default function HistoriquePage() {
   const router = useRouter();
@@ -439,6 +440,8 @@ export default function HistoriquePage() {
       ) : (
         renderMonthView()
       )}
+
+      <InstallButton />
     </main>
   );
 }
