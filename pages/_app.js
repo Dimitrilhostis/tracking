@@ -61,7 +61,6 @@ export default function MyApp({ Component, pageProps }) {
       {/* Contenu principal */}
       <main className="flex-1">
         <Component {...pageProps} />
-        <InstallPromptProvider />
       </main>
     </div>
   );
